@@ -27,13 +27,13 @@ async function run() {
             branches = await getBranches(token, repos[i], keys);  
             for (let j = 0; j < branches.length; j++) {
                 if(branches[j].protected){
-                    console.log("Deleting Branch Protection for " + branches[j].name + " of " + repos[i]);
-                    core.debug("Deleting Branch Protection for " + branches[j].name + " of " + repos[i]);
+                    console.log("Deleting Branch Protection for " + branches[j].name + " branch of " + repos[i]);
+                    core.debug("Deleting Branch Protection for " + branches[j].name + " branch of " + repos[i]);
                     await deleteProtection(token, repos[i], branches[j].name);
                 }
                 if(action == "set"){
-                    console.log("Setting Branch Protection for " + branches[j].name + " of " + repos[i]);
-                    core.debug("Setting Branch Protection for " + branches[j].name + " of " + repos[i]);
+                    console.log("Setting Branch Protection for " + branches[j].name + " branch of " + repos[i]);
+                    core.debug("Setting Branch Protection for " + branches[j].name + " branch of " + repos[i]);
                     await setProtection(token, repos[i], branches[j].name, rulesObj[branches[j].name] )
                 }
             }     
@@ -63,7 +63,7 @@ async function setProtection(token, repoName, branchName, ruleData){
             },
             data: ruleData
         });
-        console.log(result.data);
+        //console.log(result.data);
         core.debug(result.data);
     }
     catch(e){
