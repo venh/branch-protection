@@ -1,0 +1,31 @@
+{
+  "name": "branch-protection",
+  "version": "1.0.0",
+  "description": "Custom GitHub Action based on Node.js to set branch protection rules",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/action.js -o dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/venh/branch-protection.git"
+  },
+  "keywords": [
+    "branch",
+    "protection",
+    "github",
+    "action"
+  ],
+  "author": "Venkatesh Subramanian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/venh/branch-protection/issues"
+  },
+  "homepage": "https://github.com/venh/branch-protection#readme",
+  "dependencies": {
+    "@actions/core": "^1.4.0",
+    "@octokit/request": "^5.6.0",
+    "@vercel/ncc": "^0.28.6"
+  }
+}

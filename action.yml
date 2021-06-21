@@ -1,0 +1,27 @@
+name: 'Branch Protection'
+description: 'Custom GitHub action based on Node.js to set branch protection'
+author: 'Venkatesh Subramanian <venh.123@gmail.com>'
+
+inputs:
+  token:
+    description: 'This should have Admin privileges or should be an Org Level Owner'
+    required: true
+  org:
+    description: 'The name of your GitHub organization'
+    required: true
+  rulesPath:
+    description: 'The path of the rules json file for branch protection'
+    default: './rules.json'
+    required: true
+  includedReposPath:
+    description: 'Path of the file with repos (newline) to be included for optionally applying branch protection. If not provided, all repos will be considered.'    
+  excludedReposPath:
+    description: 'Path of the file with repos (newline separated) to be excluded for branch protection. This is optional.'
+  action:
+    description: 'Set or Delete Branch protection. Default is set.'
+    default: 'set'
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
