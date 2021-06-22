@@ -45,13 +45,13 @@ This action will set / delete Branch Protection rules on specified branches of G
 }
 
 ### `includedReposPath`
-**Description** - Path of the text file (.txt) with only those repos on which the branch protection needs to be applied. Put every repo name (without org/ prefix) on a new line. This is optional. If not provided, branch protection will be set for all the repos within the organization.
+**Description** - Path of the text file (.txt) with only those repos on which the branch protection needs to be applied. Specify every repo name (without org/ prefix) on a new line. This is optional. If not provided, branch protection will be set on all the repos within the organization.
 
 ### `excludedReposPath`
-**Description** - Path of the text file(.txt) with repos to be excluded from branch protection. Put every repo name (without org/ prefix) on a new line. This is optional. If not provided, branch protection will be applied for all the repos within the organization.
+**Description** - Path of the text file(.txt) with repos to be excluded from branch protection. Specify every repo name (without org/ prefix) on a new line. This is optional. If not provided, no repos will be excluded and branch protection will be applied on all the repos within the organization.
 
 ### `action`
-**Description** - This GitHub Custom action can be used to set / delete branch protection. The default value is set (if not specified). If delete is assigned, it will remove branch protection from every repo, if already present.
+**Description** - This GitHub Custom action can be used to set / delete branch protection. The default value is set (if not specified). If delete is assigned, it will remove branch protection from every repo, if branch protection is already applied.
 **Default** - 'set'  
 
 
