@@ -1,5 +1,5 @@
 name: 'Set-Branch-Protection'
-description: 'Custom GitHub action based on Node.js to set branch protection'
+description: 'Custom GitHub action based on Node.js to set branch protection. Will work on any runner. Use this in a workflow to automate branch protection.'
 author: 'Venkatesh Subramanian <venh.123@gmail.com>'
 
 inputs:
