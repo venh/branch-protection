@@ -1,4 +1,4 @@
-name: 'Branch Protection'
+name: 'Set-Branch-Protection'
 description: 'Custom GitHub action based on Node.js to set branch protection'
 author: 'Venkatesh Subramanian <venh.123@gmail.com>'
 
@@ -25,3 +25,7 @@ inputs:
 runs:
   using: 'node12'
   main: 'dist/index.js'
+  
+branding:
+  icon:
+  color: 'blue'
