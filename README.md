@@ -60,7 +60,7 @@ This action will set / delete Branch Protection rules on specified branches of G
 ```
 
 - name: Run Branch Protection
-  uses: venh/branch-protection@main
+  uses: venh/branch-protection@v1.0.0
   with:
     token: '${{ secrets.GITHUB_ADMIN_ACCESS_TOKEN }}' 
     org: Name-Of-Your-GitHub-Organization 
