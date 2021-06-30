@@ -20,6 +20,7 @@ This action will set / delete Branch Protection rules on specified branches of G
 **Required**  
 **Description** - The path of the Rules JSON file with Branch name as Key and Rules as Value. Format of the file is given below. The below JSON applies branch protection rules to release and main branches of a repo.
 
+```
 { 
     "release" : {
     "restrictions": {
@@ -43,6 +44,7 @@ This action will set / delete Branch Protection rules on specified branches of G
     }
   }
 }
+```
 
 ### `includedReposPath`
 **Description** - Path of the text file (.txt) with only those repos on which the branch protection needs to be applied. Specify every repo name (without org/ prefix) on a new line. This is optional. If not provided, branch protection will be set on all the repos within the organization.
