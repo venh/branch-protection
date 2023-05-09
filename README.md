@@ -31,7 +31,7 @@ This action will set / delete Branch Protection rules on specified branches of G
     "enforce_admins": true,
     "required_linear_history": true,
     "required_pull_request_reviews": {
-        "dismiss_stale_reviews": true
+      "dismiss_stale_reviews": true
     }
   },
   "main": {
@@ -40,7 +40,7 @@ This action will set / delete Branch Protection rules on specified branches of G
     "enforce_admins": null,
     "required_linear_history": null,
     "required_pull_request_reviews": {
-    "dismiss_stale_reviews": true
+      "dismiss_stale_reviews": true
     }
   }
 }
@@ -53,9 +53,12 @@ This action will set / delete Branch Protection rules on specified branches of G
 **Description** - Path of the text file(.txt) with repos to be excluded from branch protection. Specify every repo name (without org/ prefix) on a new line. This is optional. If not provided, no repos will be excluded and branch protection will be applied on all the repos within the organization.
 
 ### `action`
-**Description** - This GitHub Custom action can be used to set / delete branch protection. The default value is set (if not specified). If delete is assigned, it will remove branch protection from every repo, if branch protection is already applied.
-**Default** - 'set'  
+**Description** - This GitHub Custom action can be used to set / add / delete branch protection. The default value is set (if not specified). If add is assigned, it will add branch protection to every repo, if branch protection is not applied. If delete is assigned, it will remove branch protection from every repo, if branch protection is already applied.
+**Default** - 'set'
 
+### `ghBaseUrl`
+**Description** - Base URL of GitHub API. The default value is "https://api.github.com".
+**Default** - 'https://api.github.com'  
 
 # Usage
 
