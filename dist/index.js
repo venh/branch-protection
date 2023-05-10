@@ -3113,7 +3113,6 @@ async function run() {
     excludedReposPath = core.getInput("excludedReposPath");
     includedReposPath = core.getInput("includedReposPath");
     const action = core.getInput("action");
-    const baseUrl = core.getInput("ghBaseUrl");
     const canDeleteProtection = action == 'set' || action == 'delete';
     const canSetProtection = action == 'set' || action == 'add';
 
@@ -3125,7 +3124,7 @@ async function run() {
         }
 
         const request = orgRequest.defaults({
-            baseUrl: baseUrl,
+            baseUrl: process.env.GITHUB_API_URL || 'https://api.github.com',
             headers: {
                 authorization: "token " + token,
             },

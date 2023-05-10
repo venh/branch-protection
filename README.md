@@ -56,9 +56,6 @@ This action will set / delete Branch Protection rules on specified branches of G
 **Description** - This GitHub Custom action can be used to set / add / delete branch protection. The default value is set (if not specified). If add is assigned, it will add branch protection to every repo, if branch protection is not applied. If delete is assigned, it will remove branch protection from every repo, if branch protection is already applied.
 **Default** - 'set'
 
-### `ghBaseUrl`
-**Description** - Base URL of GitHub API. The default value is "https://api.github.com".
-**Default** - 'https://api.github.com'  
 
 # Usage
 

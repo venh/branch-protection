@@ -21,9 +21,6 @@ inputs:
     description: 'Set or Add or Delete Branch protection. Default is set.'
     default: 'set'
     required: true
-  ghBaseUrl:
-    description: 'Set base URL of GitHub API. Default is "https://api.github.com".'
-    default: 'https://api.github.com'
 
 runs:
   using: 'node12'
