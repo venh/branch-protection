@@ -18,12 +18,12 @@ inputs:
   excludedReposPath:
     description: 'Path of the file with repos (newline separated) to be excluded for branch protection. This is optional.'
   action:
-    description: 'Set or Delete Branch protection. Default is set.'
+    description: 'Set or Add or Delete Branch protection. Default is set.'
     default: 'set'
     required: true
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
   
 branding:

@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const { request } = require("@octokit/request");
+const { request: orgRequest } = require("@octokit/request");
 const fs = require('fs')
 
 var excludedReposPath = '';
@@ -12,29 +12,43 @@ async function run() {
     excludedReposPath = core.getInput("excludedReposPath");
     includedReposPath = core.getInput("includedReposPath");
     const action = core.getInput("action");
-    const limit = 100;
+    const canDeleteProtection = action == 'set' || action == 'delete';
+    const canSetProtection = action == 'set' || action == 'add';
+
     var rulesObj;
     var branches;
     try {
         if(!fs.existsSync(rulesPath)){
             throw "Rules JSON is missing."
         }
+
+        const request = orgRequest.defaults({
+            baseUrl: process.env.GITHUB_API_URL || 'https://api.github.com',
+            headers: {
+                authorization: "token " + token,
+            },
+        })
         const rules = fs.readFileSync(rulesPath, {encoding:'utf8', flag:'r'});
         rulesObj = JSON.parse(rules);
         keys = Object.keys(rulesObj);
-        var repos = await getFinalRepos(token, orgName);  
+        var repos = await getFinalRepos(request, orgName);  
         for (let i = 0; i < repos.length; i++) {
-            branches = await getBranches(token, repos[i], keys);  
+            branches = await getBranches(request, repos[i], keys);  
             for (let j = 0; j < branches.length; j++) {
                 if(branches[j].protected){
+                    if (!canDeleteProtection) {
+                        console.log("Skip Branch Protection for " + branches[j].name + " branch of " + repos[i]);
+                        continue;
+                    }
+
                     console.log("Deleting Branch Protection for " + branches[j].name + " branch of " + repos[i]);
                     core.debug("Deleting Branch Protection for " + branches[j].name + " branch of " + repos[i]);
-                    await deleteProtection(token, repos[i], branches[j].name);
+                    await deleteProtection(request, repos[i], branches[j].name);
                 }
-                if(action == "set"){
+                if(canSetProtection){
                     console.log("Setting Branch Protection for " + branches[j].name + " branch of " + repos[i]);
                     core.debug("Setting Branch Protection for " + branches[j].name + " branch of " + repos[i]);
-                    await setProtection(token, repos[i], branches[j].name, rulesObj[branches[j].name] )
+                    await setProtection(request, repos[i], branches[j].name, rulesObj[branches[j].name] )
                 }
             }     
         }
@@ -45,7 +59,7 @@ async function run() {
   }
 }
 
-async function setProtection(token, repoName, branchName, ruleData){
+async function setProtection(request, repoName, branchName, ruleData){
     const url = "/repos/" + repoName + "/branches/" + branchName + "/protection"
     if(ruleData == ""){
         ruleData = {
@@ -58,9 +72,6 @@ async function setProtection(token, repoName, branchName, ruleData){
     }
     try {
         const result = await request("PUT " + url, {
-            headers: {
-            authorization: "token " + token,
-            },
             data: ruleData
         });
         //console.log(result.data);
@@ -72,14 +83,10 @@ async function setProtection(token, repoName, branchName, ruleData){
     }
 }
 
-async function deleteProtection(token, repoName, branchName){
+async function deleteProtection(request, repoName, branchName){
     const url = "/repos/" + repoName + "/branches/" + branchName + "/protection"
     try{
-        const result = await request("DELETE " + url, {
-            headers: {
-            authorization: "token " + token,
-            }
-        });
+        const result = await request("DELETE " + url);
         if(result.status != 204){
             throw "Exception occured during Delete Protection";
         }
@@ -90,15 +97,11 @@ async function deleteProtection(token, repoName, branchName){
     }
 }
 
-async function getBranches(token, repoName, branchNames){
+async function getBranches(request, repoName, branchNames){
     branchInfoArr = [];
     const url = "/repos/" + repoName + "/branches"
     try {
-        const result = await request("GET " + url, {
-            headers: {
-            authorization: "token " + token,
-            }
-        });
+        const result = await request("GET " + url);
         branchData = result.data;
         for (let j = 0; j < branchData.length; j++) {
             const element = branchData[j];
@@ -114,13 +117,10 @@ async function getBranches(token, repoName, branchNames){
     return branchInfoArr;
 }
 
-async function getRepoCount(token, orgName){
+async function getRepoCount(request, orgName){
     repoCnt = 0;
     try {
         const result = await request("GET /orgs/{org}/repos", {
-            headers: {
-            authorization: "token " + token,
-            },
             org: orgName,
             per_page:1,
             type: "all"
@@ -140,13 +140,10 @@ function getPageCount(itemCount, limit){
     return pageCount;
 }
 
-async function getPagedRepos(token, orgName, pageNum, limit){
+async function getPagedRepos(request, orgName, pageNum, limit){
     var repos = [];
     try {
         const result = await request("GET /orgs/{org}/repos", {
-            headers: {
-            authorization: "token " + token,
-            },
             org: orgName,
             per_page:limit,
             type: "all",
@@ -163,7 +160,7 @@ async function getPagedRepos(token, orgName, pageNum, limit){
     return repos;
 }
 
-async function getFinalRepos(token, orgName){
+async function getFinalRepos(request, orgName){
     repos = [];
     includedRepos = [];
     limit = 100;
@@ -175,12 +172,12 @@ async function getFinalRepos(token, orgName){
             }
             return includedRepos;
         }
-        repoCount = await getRepoCount(token, orgName); 
+        repoCount = await getRepoCount(request, orgName); 
         pageCnt = getPageCount(repoCount, limit);
         excludedRepos = getReposFromFile(excludedReposPath);
         for (let i = 0; i < pageCnt; i++) {
             i = i + 1;
-            pagedRepos = await getPagedRepos(token, orgName, i, limit);
+            pagedRepos = await getPagedRepos(request, orgName, i, limit);
             for (let j = 0; j < pagedRepos.length; j++) {
                 repoShortName = pagedRepos[j].replace(orgName + "/","");
                 if(!excludedRepos.includes(repoShortName)) {
